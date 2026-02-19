@@ -62,4 +62,4 @@ Clone the repository
 - cd YOUR_REPOSITORY
   
  Run the application
-- python main.py
+- python3 main.py
