@@ -17,7 +17,10 @@
 # No tasks on the list
 
 class ToDoListError(Exception):
-    pass
+    """Wyjątek dla aplikacji ToDoList."""
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
 
 class ToDoList:
     def __init__(self):
@@ -41,16 +44,17 @@ class ToDoList:
         return list_of_strings
 
     def remove_from_list(self,index):
-        if not index in self.list_of_to_dos:
-            raise ToDoListError('Cannot remove todo: no todo with index=0')
         indexing = int(index)
+        if indexing not in self.list_of_to_dos:
+            raise ToDoListError('Cannot remove todo: no todo with index=0')
         del self.list_of_to_dos[indexing]
+
+
 
     def done(self,index):
         indexing = int(index)
-        if not index in self.list_of_to_dos:
-            raise ToDoListError('Cannot mark done todo: no todo with index=0')
-
+        if indexing not in self.list_of_to_dos:
+            raise ToDoListError(f'Cannot mark done todo: no todo with index= {index}')
         self.list_of_to_dos[indexing]['done'] = True
 
 # Returns:
