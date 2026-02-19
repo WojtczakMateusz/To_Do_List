@@ -17,3 +17,8 @@ The program is designed to demonstrate:
 3. DONE <task_id> --- Marks a task as completed
 4. LIST --- Displays all tasks
 5. EXIT --- Closes the application
+
+Each task contains:
+ Unique ID
+ Task description
+ Completion status
