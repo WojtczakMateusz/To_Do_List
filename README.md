@@ -24,4 +24,42 @@ Each task contains:
  - Task description.
  - Completion status.
 
+# Examples:
+'''
+>ADD LISTA
 
+>LIST
+
+0:[ ]LISTA
+
+>DONE 0
+
+>ADD TWO
+
+>LIST
+
+0:[X]LISTA
+
+1:[ ]TWO
+
+>REMOVE 0
+
+>LIST
+
+1:[ ]TWO
+
+'''
+
+# How to run:
+
+Check your Python version:
+- python --version
+
+Clone the repository
+- git clone https://github.com/WojtczakMateusz/To_Do_List.git
+  
+ Navigate to the project folder
+- cd YOUR_REPOSITORY
+  
+ Run the application
+- python3 main.py
