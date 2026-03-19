@@ -1,7 +1,9 @@
-import sys
 import argparse
-from typing import List
 import json
+import sys
+
+from typing import List
+
 
 # Create todo list app that supports 4 commands:
 # - ADD <task_description>
@@ -22,49 +24,53 @@ import json
 
 class ToDoListError(Exception):
     """Wyjątek dla aplikacji ToDoList."""
+
     def __init__(self, message):
         self.message = message
         super().__init__(self.message)
+
 
 class ToDoList:
     def __init__(self):
         self.list_of_to_dos = {}
         self.i = 0
 
-    def dodaj(self,message):
+    def dodaj(self, message):
         task = {"description": message, "done": False, "index": self.i}
         self.list_of_to_dos[self.i] = task
         self.i += 1
 
-
     def list_of_things(self) -> List[str]:
+        """
+        Creates representation of todol list items in format: <int>: [<status>] <description>.
+        Example: 1: [X] Do laundry
+        :return: List of string descriptions of items
+        """
         list_of_strings = []
         for message in self.list_of_to_dos.values():
-            # 1: [X?] <description>
-            if(message["done"] == False):
-                list_of_strings.append(str(message["index"])+":"+ "[ ]" +message["description"])
-            else:
-                list_of_strings.append(str(message["index"])+":"+ "[X]" +message["description"])
+            status_mark = "X" if message["done"] else " "
+            represent = f"{message['index']}:[{status_mark}]{message['description']}"
+            list_of_strings.append(represent)
         return list_of_strings
 
-    def remove_from_list(self,index):
+    def remove_from_list(self, index):
         indexing = int(index)
         if indexing not in self.list_of_to_dos:
             raise ToDoListError('Cannot remove todo: no todo with index=0')
         del self.list_of_to_dos[indexing]
 
-
-
-    def done(self,index):
+    def done(self, index):
         indexing = int(index)
         if indexing not in self.list_of_to_dos:
             raise ToDoListError(f'Cannot mark done todo: no todo with index= {index}')
         self.list_of_to_dos[indexing]['done'] = True
-    #serializacja
+
+    # serializacja
     def save_to_file(self, filename):
         with open(filename, 'w', encoding="utf-8") as f:
             json.dump({"i": self.i, "tasks": self.list_of_to_dos}, f, ensure_ascii=False, indent=2)
-    #deserializacja
+
+    # deserializacja
     def load_from_file(self, filename):
         try:
             with open(filename, 'r', encoding="utf-8") as f:
@@ -75,19 +81,20 @@ class ToDoList:
             self.list_of_to_dos = {}
             self.i = 0
 
+
 # Returns:
 # { "name": "ADD", "description": "<parsed-description>" }
 # { "name": "REMOVE", "index": <parsed-index>" }
 # etc.
-def parse_command(input_string):#ADD XD
-    two_information = input_string.split(" ",1)
+def parse_command(input_string):  # ADD XD
+    two_information = input_string.split(" ", 1)
     name = two_information[0].upper()
 
-    if(name == "ADD"):
+    if (name == "ADD"):
         if len(two_information) < 2:
             raise ToDoListError("ADD requires a description")
         argument = two_information[1]
-        return {"name" : name, "description" : argument}
+        return {"name": name, "description": argument}
     elif (name == "REMOVE"):
         argument = two_information[1]
         return {"name": name, "index": int(argument)}
@@ -101,14 +108,15 @@ def parse_command(input_string):#ADD XD
     else:
         raise ToDoListError('Unknown command {}'.format(input_string))
 
+
 def clear_file(filename):
     with open(filename, "w", encoding="utf-8") as file:
         pass
 
+
 if __name__ == '__main__':
     filename = sys.argv[1]
-    print("Loaded database file:" , filename)
-
+    print("Loaded database file:", filename)
 
     parser = argparse.ArgumentParser()
     parser.add_argument("file")
@@ -154,4 +162,3 @@ if __name__ == '__main__':
             print("Błąd:", e)
         except ValueError:
             print("Błąd: id musi być liczbą")
-
